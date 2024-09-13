@@ -2,6 +2,7 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
+  mode: "development",
   entry: './index.js', // Your main entry file
   target: 'node', // This is a Node.js application
   externals: [nodeExternals()], // Exclude node_modules from the bundle
