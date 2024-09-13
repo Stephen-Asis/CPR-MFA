@@ -65,7 +65,8 @@ app.get("/getJwtToken", async (req, res) => {
 })
 
 app.get("/", async (req, res) => {
-    res.json({ msg: "working" })
+    // res.json({ msg: "working" })
+    res.send('<h1>Node BackEnd Running Successfully</h1>')
 })
 
 app.use(errorHandler());
