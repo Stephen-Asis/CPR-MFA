@@ -1,11 +1,3 @@
-// import express from "express"
-// import supertokens from "supertokens-node";
-// import { superTokensConfig } from "./superTokensConfig.js";
-// import cors from "cors";
-// import pkg from "supertokens-node/framework/express";
-// import { verifySession } from "supertokens-node/recipe/session/framework/express";
-// import DotenvFlow from "dotenv-flow"
-// import jwt from "supertokens-node/recipe/jwt"
 const express = require("express")
 const supertokens = require("supertokens-node")
 const superTokensConfig = require("./superTokensConfig.js")
@@ -59,13 +51,12 @@ async function createJWT(payload) {
     throw new Error("Unable to create JWT. Should never come here.")
 }
 
-app.get("/getJwtToken", async (req, res) => {
+app.post("/getJwtToken", verifySession(), async (req, res) => {
     let token = await createJWT(req.body)
     res.json({ token })
 })
 
 app.get("/", async (req, res) => {
-    // res.json({ msg: "working" })
     res.send('<h1>Node BackEnd Running Successfully</h1>')
 })
 

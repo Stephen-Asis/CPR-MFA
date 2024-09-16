@@ -1,14 +1,3 @@
-// import EmailPassword from "supertokens-node/recipe/emailpassword";
-// import Passwordless from "supertokens-node/recipe/passwordless";
-// import Session from "supertokens-node/recipe/session";
-// import Dashboard from "supertokens-node/recipe/dashboard";
-// import MultiFactorAuth from "supertokens-node/recipe/multifactorauth";
-// import AccountLinking from "supertokens-node/recipe/accountlinking";
-// import EmailVerification from "supertokens-node/recipe/emailverification";
-// import UserRoles from "supertokens-node/recipe/userroles";
-// import DotenvFlow from "dotenv-flow"
-// import jwt from "supertokens-node/recipe/jwt"
-
 const EmailPassword = require("supertokens-node/recipe/emailpassword")
 const Passwordless = require("supertokens-node/recipe/passwordless")
 const Session = require("supertokens-node/recipe/session")
@@ -48,29 +37,29 @@ module.exports = {
         EmailVerification.init({
             mode: "REQUIRED",
         }),
-        AccountLinking.init({
-            shouldDoAutomaticAccountLinking: async () => ({
-                shouldAutomaticallyLink: true,
-                shouldRequireVerification: true,
-            }),
-        }),
-        MultiFactorAuth.init({
-            firstFactors: ["emailpassword"],
-            override: {
-                functions: (oI) => ({
-                    ...oI,
-                    getMFARequirementsForAuth: () => [
-                        {
-                            oneOf: [
-                                MultiFactorAuth.FactorIds.LINK_EMAIL,
-                                MultiFactorAuth.FactorIds.OTP_EMAIL,
-                                MultiFactorAuth.FactorIds.OTP_PHONE,
-                            ],
-                        },
-                    ],
-                }),
-            },
-        }),
+        // AccountLinking.init({
+        //     shouldDoAutomaticAccountLinking: async () => ({
+        //         shouldAutomaticallyLink: true,
+        //         shouldRequireVerification: true,
+        //     }),
+        // }),
+        // MultiFactorAuth.init({
+        //     firstFactors: ["emailpassword"],
+        //     override: {
+        //         functions: (oI) => ({
+        //             ...oI,
+        //             getMFARequirementsForAuth: () => [
+        //                 {
+        //                     oneOf: [
+        //                         MultiFactorAuth.FactorIds.LINK_EMAIL,
+        //                         MultiFactorAuth.FactorIds.OTP_EMAIL,
+        //                         MultiFactorAuth.FactorIds.OTP_PHONE,
+        //                     ],
+        //                 },
+        //             ],
+        //         }),
+        //     },
+        // }),
         jwt.init(),
         // totp.init(),
         Session.init(),
