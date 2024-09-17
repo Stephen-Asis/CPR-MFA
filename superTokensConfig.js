@@ -37,29 +37,29 @@ module.exports = {
         EmailVerification.init({
             mode: "REQUIRED",
         }),
-        // AccountLinking.init({
-        //     shouldDoAutomaticAccountLinking: async () => ({
-        //         shouldAutomaticallyLink: true,
-        //         shouldRequireVerification: true,
-        //     }),
-        // }),
-        // MultiFactorAuth.init({
-        //     firstFactors: ["emailpassword"],
-        //     override: {
-        //         functions: (oI) => ({
-        //             ...oI,
-        //             getMFARequirementsForAuth: () => [
-        //                 {
-        //                     oneOf: [
-        //                         MultiFactorAuth.FactorIds.LINK_EMAIL,
-        //                         MultiFactorAuth.FactorIds.OTP_EMAIL,
-        //                         MultiFactorAuth.FactorIds.OTP_PHONE,
-        //                     ],
-        //                 },
-        //             ],
-        //         }),
-        //     },
-        // }),
+        AccountLinking.init({
+            shouldDoAutomaticAccountLinking: async () => ({
+                shouldAutomaticallyLink: true,
+                shouldRequireVerification: true,
+            }),
+        }),
+        MultiFactorAuth.init({
+            firstFactors: ["emailpassword"],
+            override: {
+                functions: (oI) => ({
+                    ...oI,
+                    getMFARequirementsForAuth: () => [
+                        {
+                            oneOf: [
+                                MultiFactorAuth.FactorIds.LINK_EMAIL,
+                                MultiFactorAuth.FactorIds.OTP_EMAIL,
+                                MultiFactorAuth.FactorIds.OTP_PHONE,
+                            ],
+                        },
+                    ],
+                }),
+            },
+        }),
         jwt.init(),
         // totp.init(),
         Session.init(),
