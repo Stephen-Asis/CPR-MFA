@@ -37,6 +37,10 @@ module.exports = {
                     id: "PhoneNumber"
                 }, {
                     id: "PortalUserID",
+                },{
+                    id: "email",
+                },{
+                    id: "password",
                 }, {
                     id: "PortalUserType",
                 }]
