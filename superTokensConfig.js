@@ -9,7 +9,7 @@ const UserRoles = require("supertokens-node/recipe/userroles")
 const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
 const UserMetadata = require("supertokens-node/recipe/usermetadata");
-const { verifySession } = require('supertokens-node/recipe/session')
+// const { verifySession } = require('supertokens-node/recipe/session')
 
 
 DotenvFlow.config()
@@ -42,7 +42,7 @@ module.exports = {
                             const fullName = formFields.find(field => field.id === 'fullName').value;
                             const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
                             console.log(fullName,phoneNumber,'phoneNumber')
-                            const userId = req.session.getUserId();
+                            // const userId = req.session.getUserId();
                             
                             // Handle or store these fields as needed
                             // e.g., Store them in user metadata or a custom database table
