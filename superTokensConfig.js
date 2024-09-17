@@ -41,6 +41,7 @@ module.exports = {
                             // Extract the extra fields
                             const fullName = formFields.find(field => field.id === 'fullName').value;
                             const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
+                            console.log(fullName,phoneNumber,'phoneNumber')
                             
                             // Handle or store these fields as needed
                             // e.g., Store them in user metadata or a custom database table
