@@ -31,29 +31,32 @@ module.exports = {
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
         EmailPassword.init({
-            override: {
-                apis: (originalImplementation) => {
-                    return {
-                        ...originalImplementation,
-                        signUpPOST: async function (input) {
-                            const { formFields } = input;
+            // override: {
+            //     apis: (originalImplementation) => {
+            //         return {
+            //             ...originalImplementation,
+            //             signUpPOST: async function (input) {
+            //                 console.log(input,'input')
+            //                 const { formFields } = input;
                             
-                            // Extract the extra fields
-                            const fullName = formFields.find(field => field.id === 'fullName').value;
-                            const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
-                            console.log(fullName,phoneNumber,'phoneNumber')
-                            // const userId = req.session.getUserId();
+            //                 // Extract the extra fields
+            //                 const fullName = formFields.find(field => field.id === 'fullName').value;
+            //                 const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
+            //                 console.log(fullName,phoneNumber,'phoneNumber')
+            //                 // const userId = req.session.getUserId();
                             
-                            // Handle or store these fields as needed
-                            // e.g., Store them in user metadata or a custom database table
+            //                 // Handle or store these fields as needed
+            //                 // e.g., Store them in user metadata or a custom database table
                             
-                            // Continue with the original signup process
-                            console.log(await originalImplementation.signUpPOST(input),'await originalImplementation.signUpPOST(input);')
-                            return await originalImplementation.signUpPOST(input);
-                        }
-                    }
-                }
-            },
+            //                 // Continue with the original signup process
+            //                 const data = await originalImplementation.signUpPOST(input)
+            //                 console.log(data.session.userId,'await originalImplementation.signUpPOST(input);')
+            //                 await UserMetadata.updateUserMetadata(data.session.userId, { formFields: formFields });
+            //                 return data;
+            //             }
+            //         }
+            //     }
+            // },
             // signUpFeature: {
             //     formFields: [{
             //         id: "ReferenceID"
@@ -65,29 +68,32 @@ module.exports = {
             //         id: "PortalUserType",
             //     }]
             // }
-            signUpFeature: {
-                formFields: [
-                    {
-                        id: 'fullName',
-                        label: 'Full Name',
-                        placeholder: 'Enter your full name',
-                        optional: false,
-                        validate: async (value) => {
-                            // Example validation: Check if the field is not empty
-                            if (value.length === 0) {
-                                return 'Full name is required';
-                            }
-                            return undefined; // Validation passed
-                        }
-                    },
-                    {
-                        id: 'phoneNumber',
-                        label: 'Phone Number',
-                        placeholder: 'Enter your phone number',
-                        optional: true, // This field is optional
-                    },
-                ],
-            },
+            // signUpFeature: {
+            //     formFields: [
+            //         {
+            //             id: 'fullName',
+            //             label: 'Full Name',
+            //             placeholder: 'Enter your full name',
+            //             optional: false,
+            //             validate: async (value) => {
+            //                 // Example validation: Check if the field is not empty
+            //                 if (value.length === 0) {
+            //                     return 'Full name is required';
+            //                 }
+            //                 return undefined; // Validation passed
+            //             }
+            //         },
+            //         {
+            //             id: 'phoneNumber',
+            //             label: 'Phone Number',
+            //             placeholder: 'Enter your phone number',
+            //             optional: true, // This field is optional
+            //         },
+            //     ],
+            // },
+            // signUpFeature:{
+            //     phoneNumber:''
+            // }
         }),
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",

@@ -6,6 +6,8 @@ const pkg = require("supertokens-node/framework/express")
 const { verifySession } = require("supertokens-node/recipe/session/framework/express")
 const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
+const UserMetadata = require("supertokens-node/recipe/usermetadata");
+const { signUp } = require("supertokens-node/recipe/emailpassword");
 
 const { middleware, errorHandler, SessionRequest } = pkg
 
@@ -56,14 +58,25 @@ app.post("/getJwtToken", verifySession(), async (req, res) => {
     res.json({ token })
 })
 
-// app.post("/updateinfo", verifySession(), async (req, res) => {
-//     const session = req.session;
-//     const userId = session.getUserId();
-  
-//     await UserMetadata.updateUserMetadata(userId, { newKey: "data" });
-  
-//     res.json({ message: "successfully updated user metadata" });
-//   });
+app.post("/auth/signup", async(req,res)=>{
+    const {email,password,fullName,phoneNumber} = req.body
+    let signUpResponse = await signUp(email, password);
+    // await UserMetadata.updateUserMetadata(data.session.userId, { formFields: formFields });
+    if (signUpResponse.status === "OK") {
+        // User registered, now save additional fields in metadata
+        await UserMetadata.updateUserMetadata(signUpResponse.user.id, {
+            fullName,
+            phoneNumber,
+        });
+
+        return res.status(200).json({
+            message: "User registered successfully!",
+            userId: signUpResponse.user.id,
+        });
+    } else if (signUpResponse.status === "EMAIL_ALREADY_EXISTS_ERROR") {
+        return res.status(400).json({ message: "Email already exists" });
+    }
+})
 
 app.get("/", async (req, res) => {
     res.send('<h1>Node Running Successfully</h1>')
