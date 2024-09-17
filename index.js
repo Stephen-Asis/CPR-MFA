@@ -57,7 +57,7 @@ app.post("/getJwtToken", verifySession(), async (req, res) => {
 })
 
 app.get("/", async (req, res) => {
-    res.send('<h1>Node BackEnd Running Successfully</h1>')
+    res.send('<h1>Node Running Successfully</h1>')
 })
 
 app.use(errorHandler());

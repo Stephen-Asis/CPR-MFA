@@ -21,7 +21,7 @@ module.exports = {
         apiKey: dotEnv.SUPERTOKEN_API_KEY
     },
     appInfo: {
-        appName: "Check-MFA",
+        appName: "LLS-MFA",
         apiDomain: dotEnv.API_DOMAIN,
         websiteDomain: dotEnv.WEBSITE_DOMAIN,
         apiBasePath: "/",
@@ -29,7 +29,19 @@ module.exports = {
     // recipeList contains all the modules that you want to
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
-        EmailPassword.init(),
+        EmailPassword.init({
+            signUpFeature: {
+                formFields: [{
+                    id: "ReferenceID"
+                }, {
+                    id: "PhoneNumber"
+                }, {
+                    id: "PortalUserID",
+                }, {
+                    id: "PortalUserType",
+                }]
+            }
+        }),
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",
             flowType: "USER_INPUT_CODE_AND_MAGIC_LINK",
