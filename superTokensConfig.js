@@ -31,6 +31,31 @@ module.exports = {
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
         EmailPassword.init({
+            override: {
+                apis: (originalImplementation) => {
+                    return {
+                        ...originalImplementation,
+                        signUpPOST: async function (input) {
+
+                            if (originalImplementation.signUpPOST === undefined) {
+                                throw Error("Should never come here");
+                            }
+
+                            // First we call the original implementation of signUpPOST.
+                            let response = await originalImplementation.signUpPOST(input);
+
+                            // Post sign up response, we check if it was successful
+                            if (response.status === "OK") {
+
+                                // These are the input form fields values that the user used while signing up
+                                let formFields = input.formFields;
+
+                            }
+                            return response;
+                        }
+                    }
+                }
+            },
             signUpFeature: {
                 formFields: [{
                     id: "ReferenceID"
