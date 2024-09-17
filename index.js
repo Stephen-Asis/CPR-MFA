@@ -56,6 +56,15 @@ app.post("/getJwtToken", verifySession(), async (req, res) => {
     res.json({ token })
 })
 
+app.post("/updateinfo", verifySession(), async (req, res) => {
+    const session = req.session;
+    const userId = session.getUserId();
+  
+    await UserMetadata.updateUserMetadata(userId, { newKey: "data" });
+  
+    res.json({ message: "successfully updated user metadata" });
+  });
+
 app.get("/", async (req, res) => {
     res.send('<h1>Node Running Successfully</h1>')
 })
