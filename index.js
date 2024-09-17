@@ -39,11 +39,11 @@ app.get("/sessioninfo", verifySession(), async (req, res) => {
     });
 });
 
-async function createJWT(payload) {
+async function createCheck(payload) {
     let jwtResponse = await jwt.createJWT({
         ...payload,
         source: "microservice"
-    });
+    }, 7200);
     if (jwtResponse.status === "OK") {
         // Send JWT as Authorization header to M2
         return jwtResponse;
@@ -52,7 +52,7 @@ async function createJWT(payload) {
 }
 
 app.post("/getJwtToken", verifySession(), async (req, res) => {
-    let token = await createJWT(req.body)
+    let token = await createCheck(req.body)
     res.json({ token })
 })
 
