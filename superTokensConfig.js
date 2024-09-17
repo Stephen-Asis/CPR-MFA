@@ -36,37 +36,55 @@ module.exports = {
                     return {
                         ...originalImplementation,
                         signUpPOST: async function (input) {
-
-                            if (originalImplementation.signUpPOST === undefined) {
-                                throw Error("Should never come here");
-                            }
-
-                            // First we call the original implementation of signUpPOST.
-                            let response = await originalImplementation.signUpPOST(input);
-
-                            // Post sign up response, we check if it was successful
-                            if (response.status === "OK") {
-
-                                // These are the input form fields values that the user used while signing up
-                                let formFields = input.formFields;
-
-                            }
-                            return response;
+                            const { formFields } = input;
+                            
+                            // Extract the extra fields
+                            const fullName = formFields.find(field => field.id === 'fullName').value;
+                            const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
+                            
+                            // Handle or store these fields as needed
+                            // e.g., Store them in user metadata or a custom database table
+                            
+                            // Continue with the original signup process
+                            return await originalImplementation.signUpPOST(input);
                         }
                     }
                 }
             },
+            // signUpFeature: {
+            //     formFields: [{
+            //         id: "ReferenceID"
+            //     }, {
+            //         id: "PhoneNumber"
+            //     }, {
+            //         id: "PortalUserID",
+            //     }, {
+            //         id: "PortalUserType",
+            //     }]
+            // }
             signUpFeature: {
-                formFields: [{
-                    id: "ReferenceID"
-                }, {
-                    id: "PhoneNumber"
-                }, {
-                    id: "PortalUserID",
-                }, {
-                    id: "PortalUserType",
-                }]
-            }
+                formFields: [
+                    {
+                        id: 'fullName',
+                        label: 'Full Name',
+                        placeholder: 'Enter your full name',
+                        optional: false,
+                        validate: async (value) => {
+                            // Example validation: Check if the field is not empty
+                            if (value.length === 0) {
+                                return 'Full name is required';
+                            }
+                            return undefined; // Validation passed
+                        }
+                    },
+                    {
+                        id: 'phoneNumber',
+                        label: 'Phone Number',
+                        placeholder: 'Enter your phone number',
+                        optional: true, // This field is optional
+                    },
+                ],
+            },
         }),
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",
