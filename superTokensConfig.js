@@ -8,6 +8,7 @@ const EmailVerification = require("supertokens-node/recipe/emailverification")
 const UserRoles = require("supertokens-node/recipe/userroles")
 const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
+const UserMetadata = require("supertokens-node/recipe/usermetadata");
 
 
 
@@ -72,6 +73,7 @@ module.exports = {
                 }),
             },
         }),
+        UserMetadata.init(),
         jwt.init(),
         // totp.init(),
         Session.init(),
