@@ -26,7 +26,7 @@ app.use(
         origin: dotEnv.WEBSITE_DOMAIN,
         allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
         methods: ["GET", "PUT", "POST", "DELETE"],
-        credentials: "include"
+        credentials: include,
     })
 );
 
