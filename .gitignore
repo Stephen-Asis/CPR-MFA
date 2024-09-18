@@ -4,6 +4,7 @@
 /dist
 /.vscode
 /.history
+/.env
 
 # misc
 .DS_Store

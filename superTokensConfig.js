@@ -128,10 +128,7 @@ module.exports = {
         UserMetadata.init(),
         jwt.init(),
         // totp.init(),
-        Session.init({
-            accessTokenValidity: 300,
-            refreshTokenValidity: 1,
-        }),
+        Session.init(),
         Dashboard.init(),
         UserRoles.init()
     ],
