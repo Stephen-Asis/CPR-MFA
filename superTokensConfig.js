@@ -57,8 +57,7 @@ module.exports = {
             //         }
             //     }
             // },
-            // signUpFeature: {
-            //     formFields: [{
+            // signUpFeature: [{
             //         id: "ReferenceID"
             //     }, {
             //         id: "PhoneNumber"
@@ -67,7 +66,7 @@ module.exports = {
             //     }, {
             //         id: "PortalUserType",
             //     }]
-            // }
+            
             // signUpFeature: {
             //     formFields: [
             //         {
