@@ -34,19 +34,19 @@ app.use(
 );
 
 // Middleware to determine tenant and configure SuperTokens accordingly
-app.use((req, res, next) => {
+// app.use((req, res, next) => {
     
-    // Logic to adjust SuperTokens configurations based on tenantId
-        // Example: Setting different app names or API domains based on tenant
-        supertokens.updateAppInfo({
-            appName: `LLS-MFA-llsdev`,
-            apiDomain: `https://your-api.com/llsdev`,
-        });
+//     // Logic to adjust SuperTokens configurations based on tenantId
+//         // Example: Setting different app names or API domains based on tenant
+//         supertokens.updateAppInfo({
+//             appName: `LLS-MFA-llsdev`,
+//             apiDomain: `https://your-api.com/llsdev`,
+//         });
 
-        // You could also configure other tenant-specific settings here
+//         // You could also configure other tenant-specific settings here
 
-    next();
-});
+//     next();
+// });
 
 app.use(middleware());
 
