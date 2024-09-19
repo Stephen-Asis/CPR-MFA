@@ -32,6 +32,23 @@ app.use(
     })
 );
 
+// Middleware to determine tenant and configure SuperTokens accordingly
+app.use((req, res, next) => {
+    
+    // Logic to adjust SuperTokens configurations based on tenantId
+    if (tenantId) {
+        // Example: Setting different app names or API domains based on tenant
+        SuperTokens.updateAppInfo({
+            appName: `LLS-MFA-llsdev`,
+            apiDomain: `https://your-api.com/llsdev`,
+        });
+
+        // You could also configure other tenant-specific settings here
+    }
+
+    next();
+});
+
 app.use(middleware());
 
 app.get("/sessioninfo", verifySession(), async (req, res) => {
