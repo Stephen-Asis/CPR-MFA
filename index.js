@@ -10,6 +10,7 @@ const UserMetadata = require("supertokens-node/recipe/usermetadata");
 const { signUp } = require("supertokens-node/recipe/emailpassword");
 const EmailPassword = require('supertokens-node/recipe/emailpassword');
 const axios = require("axios")
+const SuperTokens = require('supertokens-node');
 
 const { middleware, errorHandler, SessionRequest } = pkg
 
@@ -36,7 +37,6 @@ app.use(
 app.use((req, res, next) => {
     
     // Logic to adjust SuperTokens configurations based on tenantId
-    if (tenantId) {
         // Example: Setting different app names or API domains based on tenant
         SuperTokens.updateAppInfo({
             appName: `LLS-MFA-llsdev`,
@@ -44,7 +44,6 @@ app.use((req, res, next) => {
         });
 
         // You could also configure other tenant-specific settings here
-    }
 
     next();
 });

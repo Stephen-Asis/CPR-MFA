@@ -9,7 +9,6 @@ const UserRoles = require("supertokens-node/recipe/userroles")
 const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
 const UserMetadata = require("supertokens-node/recipe/usermetadata");
-// const { verifySession } = require('supertokens-node/recipe/session')
 
 
 DotenvFlow.config()
