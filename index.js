@@ -34,15 +34,8 @@ app.use(
     })
 );
 
-// app.use((req, res, next) => {
-//     req.tenantId = "llsdev"; // Add the tenant ID to the request object
-//     next();
-// });
 app.use((req, res, next) => {
-    const tenantId = req.headers["x-tenant-id"] || "public"; // Get tenant ID from headers or use default
-
-    // Set tenant configuration in SuperTokens SDK or application logic
-    req.tenantId = tenantId;
+    req.tenantId = "llsdev"; // Add the tenant ID to the request object
     next();
 });
 
