@@ -30,21 +30,35 @@ module.exports = {
     // recipeList contains all the modules that you want to
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
+        Session.init(),
         EmailPassword.init({
             override: {
                 apis: (originalImplementation) => {
-                  return {
-                    ...originalImplementation,
-                    // Override sign-up API to add tenant handling
-                    signUpPOST: async function (input) {
-                      // Set the tenantId to "dev"
-                      input.tenantId = "llsdev"; // You can make this dynamic if needed
-                      
-                      return originalImplementation.signUpPOST(input);
-                    },
-                  };
+                    return {
+                        ...originalImplementation,
+                        // Override sign-up API to add tenant handling
+                        signUpPOST: async function (input) {
+                            // Set the tenantId to "dev"
+                            input.tenantId = "llsdev"; // You can make this dynamic if needed
+                            console.log(input)
+
+                            return originalImplementation.signUpPOST(input);
+                        },
+                        signInPOST: async function (input) {
+                            // Set the tenantId to "dev"
+                            input.tenantId = "llsdev"; // You can make this dynamic if needed
+                            console.log(input)
+                            if (input.session != undefined) {
+                                input.session.userDataInAccessToken.tId = "llsdev"
+                                input.session.tenantId = "llsdev"
+                            }
+                            // console.log(input.tenantId, 'tnuoh', input.session.userDataInAccessToken.tId, input.session.tenantId)
+
+                            return originalImplementation.signInPOST(input);
+                        },
+                    };
                 },
-              },
+            },
             // override: {
             //     apis: (originalImplementation) => {
             //         return {
@@ -52,16 +66,16 @@ module.exports = {
             //             signUpPOST: async function (input) {
             //                 console.log(input,'input')
             //                 const { formFields } = input;
-                            
+
             //                 // Extract the extra fields
             //                 const fullName = formFields.find(field => field.id === 'fullName').value;
             //                 const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
             //                 console.log(fullName,phoneNumber,'phoneNumber')
             //                 // const userId = req.session.getUserId();
-                            
+
             //                 // Handle or store these fields as needed
             //                 // e.g., Store them in user metadata or a custom database table
-                            
+
             //                 // Continue with the original signup process
             //                 const data = await originalImplementation.signUpPOST(input)
             //                 console.log(data.session.userId,'await originalImplementation.signUpPOST(input);')
@@ -80,7 +94,7 @@ module.exports = {
             //     }, {
             //         id: "PortalUserType",
             //     }]
-            
+
             // signUpFeature: {
             //     formFields: [
             //         {
@@ -142,7 +156,7 @@ module.exports = {
         UserMetadata.init(),
         jwt.init(),
         // totp.init(),
-        Session.init(),
+
         Dashboard.init(),
         UserRoles.init()
     ],
