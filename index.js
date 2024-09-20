@@ -10,7 +10,8 @@ const UserMetadata = require("supertokens-node/recipe/usermetadata");
 const { signUp } = require("supertokens-node/recipe/emailpassword");
 const EmailPassword = require('supertokens-node/recipe/emailpassword');
 const axios = require("axios")
-// const SuperTokens = require('supertokens-node');
+const Multitenancy = require("supertokens-node/recipe/multitenancy");
+const Tenant = require('supertokens-node/recipe/multitenancy');
 
 const { middleware, errorHandler, SessionRequest } = pkg
 
@@ -105,6 +106,13 @@ console.log(obj,'objCheck',data)
 })
 
 app.get("/", async (req, res) => {
+    // let resp = await Multitenancy.getTenant("llsdev")
+    let resp = await Multitenancy.listAllTenants()
+
+    // let response = await Multitenancy.createOrUpdateTenant("stephen", {
+    //     firstFactors: ["emailpassword"]
+    // });
+    console.log(resp)
     res.send('<h1>Node Running Successfully</h1>')
 })
 

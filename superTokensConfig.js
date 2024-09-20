@@ -9,7 +9,8 @@ const UserRoles = require("supertokens-node/recipe/userroles")
 const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
 const UserMetadata = require("supertokens-node/recipe/usermetadata");
-
+const Tenant = require('supertokens-node/recipe/multitenancy');
+const Multitenancy = require('supertokens-node/recipe/multitenancy');
 
 DotenvFlow.config()
 const dotEnv = process.env
@@ -17,7 +18,7 @@ const dotEnv = process.env
 module.exports = {
     supertokens: {
         // this is the location of the SuperTokens core.
-        connectionURI: dotEnv.SUPERTOKEN_CONNECTION_URI,
+        connectionURI: `${dotEnv.SUPERTOKEN_CONNECTION_URI}`,
         apiKey: dotEnv.SUPERTOKEN_API_KEY
     },
     appInfo: {
@@ -123,6 +124,7 @@ module.exports = {
                 }),
             },
         }),
+        Multitenancy.init(),
         UserMetadata.init(),
         jwt.init(),
         // totp.init(),
