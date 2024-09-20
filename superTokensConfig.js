@@ -31,6 +31,20 @@ module.exports = {
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
         EmailPassword.init({
+            override: {
+                apis: (originalImplementation) => {
+                  return {
+                    ...originalImplementation,
+                    // Override sign-up API to add tenant handling
+                    signUpPOST: async function (input) {
+                      // Set the tenantId to "dev"
+                      input.tenantId = "llsdev"; // You can make this dynamic if needed
+                      
+                      return originalImplementation.signUpPOST(input);
+                    },
+                  };
+                },
+              },
             // override: {
             //     apis: (originalImplementation) => {
             //         return {
