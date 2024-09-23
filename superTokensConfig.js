@@ -132,7 +132,7 @@ module.exports = {
                         host: "cpr-mfa.onrender.com",
                         authUsername: "...", // this is optional. In case not given, from.email will be used
                         password: "asis1104",
-                        port: dotEnv.PORT,
+                        port: 587,
                         from: {
                             name: "Stephen",
                             email: "stephen.j@tekclansolutions.com",
