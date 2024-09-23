@@ -35,7 +35,8 @@ app.use(
 );
 
 app.use((req, res, next) => {
-    req.tenantId = "llsdev"; // Add the tenant ID to the request object
+    console.log(req,'req_check')
+    req.tenantId = "public"; // Add the tenant ID to the request object
     next();
 });
 

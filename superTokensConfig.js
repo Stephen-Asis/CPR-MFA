@@ -33,95 +33,33 @@ module.exports = {
     recipeList: [
         Session.init(),
         EmailPassword.init({
-            override: {
-                apis: (originalImplementation) => {
-                    return {
-                        ...originalImplementation,
-                        // Override sign-up API to add tenant handling
-                        signUpPOST: async function (input) {
-                            // Set the tenantId to "dev"
-                            input.tenantId = "llsdev"; // You can make this dynamic if needed
-                            console.log(input)
-
-                            return originalImplementation.signUpPOST(input);
-                        },
-                        signInPOST: async function (input) {
-                            // Set the tenantId to "dev"
-                            input.tenantId = "llsdev"; // You can make this dynamic if needed
-                            console.log(input)
-                            if (input.session != undefined) {
-                                input.session.userDataInAccessToken.tId = "llsdev"
-                                input.session.tenantId = "llsdev"
-                            }
-                            // console.log(input.tenantId, 'tnuoh', input.session.userDataInAccessToken.tId, input.session.tenantId)
-
-                            return originalImplementation.signInPOST(input);
-                        },
-                    };
-                },
-            },
             // override: {
             //     apis: (originalImplementation) => {
             //         return {
             //             ...originalImplementation,
+            //             // Override sign-up API to add tenant handling
             //             signUpPOST: async function (input) {
-            //                 console.log(input,'input')
-            //                 const { formFields } = input;
+            //                 // Set the tenantId to "dev"
+            //                 // input.tenantId = "llsdev"; // You can make this dynamic if needed
+            //                 console.log(input)
 
-            //                 // Extract the extra fields
-            //                 const fullName = formFields.find(field => field.id === 'fullName').value;
-            //                 const phoneNumber = formFields.find(field => field.id === 'phoneNumber').value;
-            //                 console.log(fullName,phoneNumber,'phoneNumber')
-            //                 // const userId = req.session.getUserId();
-
-            //                 // Handle or store these fields as needed
-            //                 // e.g., Store them in user metadata or a custom database table
-
-            //                 // Continue with the original signup process
-            //                 const data = await originalImplementation.signUpPOST(input)
-            //                 console.log(data.session.userId,'await originalImplementation.signUpPOST(input);')
-            //                 await UserMetadata.updateUserMetadata(data.session.userId, { formFields: formFields });
-            //                 return data;
-            //             }
-            //         }
-            //     }
-            // },
-            // signUpFeature: [{
-            //         id: "ReferenceID"
-            //     }, {
-            //         id: "PhoneNumber"
-            //     }, {
-            //         id: "PortalUserID",
-            //     }, {
-            //         id: "PortalUserType",
-            //     }]
-
-            // signUpFeature: {
-            //     formFields: [
-            //         {
-            //             id: 'fullName',
-            //             label: 'Full Name',
-            //             placeholder: 'Enter your full name',
-            //             optional: false,
-            //             validate: async (value) => {
-            //                 // Example validation: Check if the field is not empty
-            //                 if (value.length === 0) {
-            //                     return 'Full name is required';
+            //                 return originalImplementation.signUpPOST(input);
+            //             },
+            //             signInPOST: async function (input) {
+            //                 // Set the tenantId to "dev"
+            //                 // input.tenantId = "llsdev"; // You can make this dynamic if needed
+            //                 console.log(input)
+            //                 if (input.session != undefined) {
+            //                     // input.session.userDataInAccessToken.tId = "llsdev"
+            //                     // input.session.tenantId = "llsdev"
             //                 }
-            //                 return undefined; // Validation passed
-            //             }
-            //         },
-            //         {
-            //             id: 'phoneNumber',
-            //             label: 'Phone Number',
-            //             placeholder: 'Enter your phone number',
-            //             optional: true, // This field is optional
-            //         },
-            //     ],
+            //                 // console.log(input.tenantId, 'tnuoh', input.session.userDataInAccessToken.tId, input.session.tenantId)
+
+            //                 return originalImplementation.signInPOST(input);
+            //             },
+            //         };
+            //     },
             // },
-            // signUpFeature:{
-            //     phoneNumber:''
-            // }
         }),
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",
@@ -129,15 +67,15 @@ module.exports = {
             emailDelivery: {
                 service: new SMTPService({
                     smtpSettings: {
-                        host: "cpr-mfa.onrender.com",
+                        host: "localhost",
                         authUsername: "...", // this is optional. In case not given, from.email will be used
-                        password: "asis1104",
-                        port: 465,
+                        password: "",
+                        port: 8000,
                         from: {
-                            name: "Stephen",
-                            email: "stephen.j@tekclansolutions.com",
+                            name: "",
+                            email: "",
                         },
-                        secure: true
+                        secure: false
                     },
                     override: (originalImplementation) => {
                         return {
