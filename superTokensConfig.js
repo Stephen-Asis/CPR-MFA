@@ -129,7 +129,7 @@ module.exports = {
             emailDelivery: {
                 service: new SMTPService({
                     smtpSettings: {
-                        host: dotEnv.API_DOMAIN,
+                        host: "cpr-mfa.onrender.com",
                         authUsername: "...", // this is optional. In case not given, from.email will be used
                         password: "...",
                         port: dotEnv.PORT,
