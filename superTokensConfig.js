@@ -131,11 +131,11 @@ module.exports = {
                     smtpSettings: {
                         host: "cpr-mfa.onrender.com",
                         authUsername: "...", // this is optional. In case not given, from.email will be used
-                        password: "...",
+                        password: "asis1104",
                         port: dotEnv.PORT,
                         from: {
-                            name: "...",
-                            email: "...",
+                            name: "Stephen",
+                            email: "stephen.j@tekclansolutions.com",
                         },
                         secure: true
                     },
