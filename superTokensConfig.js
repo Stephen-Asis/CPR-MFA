@@ -132,7 +132,7 @@ module.exports = {
                         host: dotEnv.API_DOMAIN,
                         authUsername: "...", // this is optional. In case not given, from.email will be used
                         password: "...",
-                        port: "",
+                        port: dotEnv.PORT,
                         from: {
                             name: "...",
                             email: "...",
