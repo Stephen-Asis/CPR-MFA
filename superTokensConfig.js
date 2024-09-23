@@ -11,6 +11,7 @@ const jwt = require("supertokens-node/recipe/jwt")
 const UserMetadata = require("supertokens-node/recipe/usermetadata");
 const Tenant = require('supertokens-node/recipe/multitenancy');
 const Multitenancy = require('supertokens-node/recipe/multitenancy');
+const { SMTPService } = require("supertokens-node/recipe/passwordless/emaildelivery");
 
 DotenvFlow.config()
 const dotEnv = process.env
@@ -124,7 +125,63 @@ module.exports = {
         }),
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",
-            flowType: "USER_INPUT_CODE_AND_MAGIC_LINK",
+            flowType: "USER_INPUT_CODE_AND_MAGIC_LINK", // or 'MAGIC_LINK' based on your configuration
+            emailDelivery: {
+                service: new SMTPService({
+                    smtpSettings: {
+                        host: dotEnv.API_DOMAIN,
+                        authUsername: "...", // this is optional. In case not given, from.email will be used
+                        password: "...",
+                        port: "",
+                        from: {
+                            name: "...",
+                            email: "...",
+                        },
+                        secure: true
+                    },
+                    override: (originalImplementation) => {
+                        return {
+                            ...originalImplementation,
+                            getContent: async function ({
+                                isFirstFactor,
+                                codeLifetime, // amount of time the code is alive for (in MS)
+                                email,
+                                urlWithLinkCode, // magic link
+                                userInputCode, // OTP
+                            }) {
+                                // if (isFirstFactor) {
+                                //     // this is for first factor login
+                                //     return {
+                                //         body: "fg chdsbfh djhsdvgav cjdshfbhdg scajhbgdfhv fdbsghdfvc jhbdf",
+                                //         isHtml: true,
+                                //         subject: "Login to your account",
+                                //         toEmail: email
+                                //     }
+                                // } else {
+                                //     // this is for MFA login (only applicable if you are using MFA).
+                                //     // In this case, the urlWithLinkCode will always be undefined since 
+                                //     // we only support OTP based MFA and not link based MFA
+                                //     return {
+                                //         body: "EMAIL BODY dfgf hfggdfbc whefuer uf dcausdhnc fegudc sjbhb",
+                                //         isHtml: true,
+                                //         subject: "Login via MFA",
+                                //         toEmail: email
+                                //     }
+                                // }
+
+                                // You can even call the original implementation and
+                                // modify its content:
+
+                                /*
+                                let originalContent = await originalImplementation.getContent(input)
+                                originalContent.subject = "My custom subject";
+                                return originalContent;
+                                */
+                            }
+                        }
+                    }
+                })
+            }
         }),
         EmailVerification.init({
             mode: "REQUIRED",
