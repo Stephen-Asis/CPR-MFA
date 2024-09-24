@@ -33,6 +33,48 @@ module.exports = {
     recipeList: [
         Session.init(),
         EmailPassword.init({
+            emailDelivery: {
+                override: (originalImplementation) => {
+                    return {
+                        ...originalImplementation,
+                        sendEmail: async function (input) {
+                            if (input.type === "PASSWORD_RESET") {
+                                return originalImplementation.sendEmail({
+                                    ...input,
+                                    passwordResetLink: input.passwordResetLink.replace(
+                                        // This is: `${websiteDomain}${websiteBasePath}/reset-password`
+                                        "http://localhost:8080//reset-password",
+                                        "http://localhost:8080/#/login"
+                                        )
+                                })
+                            }
+                            return originalImplementation.sendEmail(input);
+                        }
+                    }
+                }
+            },
+            override: {
+                apis: (originalImplementation) => {
+                    return {
+                        ...originalImplementation,
+                        passwordResetPOST: async function(input) {
+                            
+                            if (originalImplementation.passwordResetPOST === undefined) {
+                                throw Error("Should never come here");
+                            }
+
+                            // First we call the original implementation
+                            let response = await originalImplementation.passwordResetPOST(input);
+                            
+                            // Then we check if it was successfully completed
+                            if (response.status === "OK") {
+                                // TODO: post password reset logic
+                            }
+                            return response;
+                        }
+                    };
+                },
+            },
             // override: {
             //     apis: (originalImplementation) => {
             //         return {
@@ -64,62 +106,52 @@ module.exports = {
         Passwordless.init({
             contactMethod: "EMAIL_OR_PHONE",
             flowType: "USER_INPUT_CODE_AND_MAGIC_LINK", // or 'MAGIC_LINK' based on your configuration
-            emailDelivery: {
-                service: new SMTPService({
-                    smtpSettings: {
-                        host: "localhost",
-                        authUsername: "...", // this is optional. In case not given, from.email will be used
-                        password: "",
-                        port: 8000,
-                        from: {
-                            name: "",
-                            email: "",
-                        },
-                        secure: false
-                    },
-                    override: (originalImplementation) => {
-                        return {
-                            ...originalImplementation,
-                            getContent: async function ({
-                                isFirstFactor,
-                                codeLifetime, // amount of time the code is alive for (in MS)
-                                email,
-                                urlWithLinkCode, // magic link
-                                userInputCode, // OTP
-                            }) {
-                                // if (isFirstFactor) {
-                                //     // this is for first factor login
-                                //     return {
-                                //         body: "fg chdsbfh djhsdvgav cjdshfbhdg scajhbgdfhv fdbsghdfvc jhbdf",
-                                //         isHtml: true,
-                                //         subject: "Login to your account",
-                                //         toEmail: email
-                                //     }
-                                // } else {
-                                //     // this is for MFA login (only applicable if you are using MFA).
-                                //     // In this case, the urlWithLinkCode will always be undefined since 
-                                //     // we only support OTP based MFA and not link based MFA
-                                //     return {
-                                //         body: "EMAIL BODY dfgf hfggdfbc whefuer uf dcausdhnc fegudc sjbhb",
-                                //         isHtml: true,
-                                //         subject: "Login via MFA",
-                                //         toEmail: email
-                                //     }
-                                // }
+            // emailDelivery: {
+            //     service: new SMTPService({
+            //         smtpSettings: {
+            //             host: "smtp.gmail.com",
+            //             authUsername: "", // this is optional. In case not given, from.email will be used
+            //             password: "ipyt cpoi ndwj rmzz",
+            //             port: 587,
+            //             from: {
+            //                 name: "Stephen",
+            //                 email: "rogersstephen076@gmail.com",
+            //             },
+            //             secure: false
+            //         },
+            //         override: (originalImplementation) => {
+            //             return {
+            //                 ...originalImplementation,
+            //                 getContent: async function ({
+            //                     isFirstFactor,
+            //                     codeLifetime, // amount of time the code is alive for (in MS)
+            //                     email,
+            //                     urlWithLinkCode, // magic link
+            //                     userInputCode, // OTP
+            //                 }) {
+            //                     // this is for MFA login (only applicable if you are using MFA).
+            //                     // In this case, the urlWithLinkCode will always be undefined since 
+            //                     // we only support OTP based MFA and not link based MFA
+            //                     return {
+            //                         body: "EMAIL BODY dfgf hfggdfbc whefuer uf dcausdhnc fegudc sjbhb",
+            //                         isHtml: true,
+            //                         subject: "Login via MFA",
+            //                         toEmail: email
+            //                     }
 
-                                // You can even call the original implementation and
-                                // modify its content:
+            //                     // You can even call the original implementation and
+            //                     // modify its content:
 
-                                /*
-                                let originalContent = await originalImplementation.getContent(input)
-                                originalContent.subject = "My custom subject";
-                                return originalContent;
-                                */
-                            }
-                        }
-                    }
-                })
-            }
+            //                     /*
+            //                     let originalContent = await originalImplementation.getContent(input)
+            //                     originalContent.subject = "My custom subject";
+            //                     return originalContent;
+            //                     */
+            //                 }
+            //             }
+            //         }
+            //     })
+            // }
         }),
         EmailVerification.init({
             mode: "REQUIRED",

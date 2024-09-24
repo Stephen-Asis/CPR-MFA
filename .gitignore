@@ -5,6 +5,7 @@
 /.vscode
 /.history
 /.env
+/node_modules
 
 # misc
 .DS_Store
@@ -14,4 +15,3 @@ yarn-debug.log*
 yarn-error.log*
 
 TODO
-node_modules

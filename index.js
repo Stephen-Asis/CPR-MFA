@@ -8,10 +8,11 @@ const DotenvFlow = require("dotenv-flow")
 const jwt = require("supertokens-node/recipe/jwt")
 const UserMetadata = require("supertokens-node/recipe/usermetadata");
 const { signUp } = require("supertokens-node/recipe/emailpassword");
-const EmailPassword = require('supertokens-node/recipe/emailpassword');
+// const EmailPassword = require('supertokens-node/recipe/emailpassword');
 const axios = require("axios")
 const Multitenancy = require("supertokens-node/recipe/multitenancy");
 const Tenant = require('supertokens-node/recipe/multitenancy');
+const { EmailPassword } = require("supertokens-node/recipe/emailpassword");
 
 const { middleware, errorHandler, SessionRequest } = pkg
 
@@ -34,13 +35,12 @@ app.use(
     })
 );
 
+app.use(middleware());
+
 app.use((req, res, next) => {
-    console.log(req,'req_check')
     req.tenantId = "public"; // Add the tenant ID to the request object
     next();
 });
-
-app.use(middleware());
 
 app.get("/sessioninfo", verifySession(), async (req, res) => {
     let session = req.session;
@@ -68,6 +68,12 @@ app.post("/getJwtToken", verifySession(), async (req, res) => {
     res.json({ token })
 })
 
+app.get('/set-cookie', (req, res) => {
+    res.cookie('myCookie', 'value', {
+        sameSite: 'None', // or 'Lax' / 'Strict'secure: true,     // Ensure to set this if using SameSite=None    });     res.send('Cookie set'); });
+    })
+})
+
 app.post('/register', async (req, res) => {
     const data = await req.body;
     const obj = {
@@ -77,7 +83,6 @@ app.post('/register', async (req, res) => {
         ]
     }
 
-console.log(obj,'objCheck',data)
     const response = await axios.post(`${dotEnv.API_DOMAIN}/signup`, obj, {
         headers: {
             'Content-Type': 'application/json',
@@ -93,7 +98,6 @@ console.log(obj,'objCheck',data)
                 checkData = { ...checkData, ...{ [val]: data[val] } }
             }
         })
-        // console.log(checkData, response)
         await UserMetadata.updateUserMetadata(response.data.user.id, checkData);
         res.status(200).json({
             message: 'Signup successful',
@@ -106,14 +110,22 @@ console.log(obj,'objCheck',data)
 
 })
 
+app.put("/meta-data-update", async (req, res) => {
+    console.log(req.body)
+    await UserMetadata.updateUserMetadata(req.body.id, req.body);
+})
+
+// app.post("/change-password", async (req, res) => {
+//     await EmailPassword.sendPasswordResetEmail("stephen.j@tekclansolutions.com");
+// })
+
 app.get("/", async (req, res) => {
     // let resp = await Multitenancy.getTenant("llsdev")
     let resp = await Multitenancy.listAllTenants()
 
     // let response = await Multitenancy.createOrUpdateTenant("stephen", {
     //     firstFactors: ["emailpassword"]
-    // });
-    console.log(resp)
+    // });s
     res.send('<h1>Node Running Successfully</h1>')
 })
 
