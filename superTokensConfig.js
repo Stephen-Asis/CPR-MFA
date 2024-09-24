@@ -31,28 +31,27 @@ module.exports = {
     // recipeList contains all the modules that you want to
     // use from SuperTokens. See the full list here: https://supertokens.com/docs/guides
     recipeList: [
-        Session.init(),
         EmailPassword.init({
-            emailDelivery: {
-                override: (originalImplementation) => {
-                    return {
-                        ...originalImplementation,
-                        sendEmail: async function (input) {
-                            if (input.type === "PASSWORD_RESET") {
-                                return originalImplementation.sendEmail({
-                                    ...input,
-                                    passwordResetLink: input.passwordResetLink.replace(
-                                        // This is: `${websiteDomain}${websiteBasePath}/reset-password`
-                                        "http://localhost:8080//reset-password",
-                                        "http://localhost:8080/#/login"
-                                        )
-                                })
-                            }
-                            return originalImplementation.sendEmail(input);
-                        }
-                    }
-                }
-            },
+            // emailDelivery: {
+            //     override: (originalImplementation) => {
+            //         return {
+            //             ...originalImplementation,
+            //             sendEmail: async function (input) {
+            //                 if (input.type === "PASSWORD_RESET") {
+            //                     return originalImplementation.sendEmail({
+            //                         ...input,
+            //                         passwordResetLink: input.passwordResetLink.replace(
+            //                             // This is: `${websiteDomain}${websiteBasePath}/reset-password`
+            //                             "http://localhost:8080//reset-password",
+            //                             "http://localhost:8080/#/login"
+            //                             )
+            //                     })
+            //                 }
+            //                 return originalImplementation.sendEmail(input);
+            //             }
+            //         }
+            //     }
+            // },
             override: {
                 apis: (originalImplementation) => {
                     return {
@@ -185,6 +184,9 @@ module.exports = {
         // totp.init(),
 
         Dashboard.init(),
-        UserRoles.init()
+        UserRoles.init(),
+        Session.init({
+            cookieSameSite: "none"
+        }),
     ],
 };

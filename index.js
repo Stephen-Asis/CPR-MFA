@@ -35,12 +35,12 @@ app.use(
     })
 );
 
-app.use(middleware());
-
 app.use((req, res, next) => {
     req.tenantId = "public"; // Add the tenant ID to the request object
     next();
 });
+
+app.use(middleware());
 
 app.get("/sessioninfo", verifySession(), async (req, res) => {
     let session = req.session;
@@ -99,9 +99,7 @@ app.post('/register', async (req, res) => {
             }
         })
         await UserMetadata.updateUserMetadata(response.data.user.id, checkData);
-        res.status(200).json({
-            message: 'Signup successful',
-        });
+        res.status(200).json(response);
     } else {
         res.status(500).json({
             message: 'Internal Serval Error',
@@ -110,9 +108,10 @@ app.post('/register', async (req, res) => {
 
 })
 
-app.put("/meta-data-update", async (req, res) => {
+app.put("/meta-data-update/:id", async (req, res) => {
     console.log(req.body)
-    await UserMetadata.updateUserMetadata(req.body.id, req.body);
+    let data = await UserMetadata.updateUserMetadata(req.params.id, req.body);
+    res.send(data)
 })
 
 // app.post("/change-password", async (req, res) => {
