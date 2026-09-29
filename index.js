@@ -4,17 +4,13 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/api/test", (req, res) => {
-  const success = true;
-
+app.post("/supplier", (req, res) => {
+  const success = req?.body;
+console.log(req.body);
   if (success) {
     return res.status(200).json({
       success: true,
-      message: "API executed successfully",
-      data: {
-        id: 1,
-        name: "John"
-      }
+      data: req.body
     });
   }
 
