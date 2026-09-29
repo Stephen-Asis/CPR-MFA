@@ -17,7 +17,7 @@ const cookieParser = require('cookie-parser');
 
 const { middleware, errorHandler, SessionRequest } = pkg
 
-supertokens.init(superTokensConfig);
+// supertokens.init(superTokensConfig);
 
 const app = express()
 
@@ -59,6 +59,27 @@ app.get("/sessioninfo", verifySession(), async (req, res) => {
         userId: session?.getUserId(),
         accessTokenPayload: session?.getAccessTokenPayload(),
     });
+});
+
+app.post("/supplier", (req, res) => {
+  const success = true;
+  console.log("Received request body:supplier", req.body);
+
+  if (success) {
+    return res.status(200).json({
+      success: true,
+      message: "API executed successfully",
+      data: {
+        id: 1,
+        name: "John"
+      }
+    });
+  }
+
+  return res.status(500).json({
+    success: false,
+    message: "Something went wrong"
+  });
 });
 
 async function createCheck(payload) {
