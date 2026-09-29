@@ -4,6 +4,9 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.post("/supplier", (req, res) => {
   const success = req?.body;
 console.log(req.body);
