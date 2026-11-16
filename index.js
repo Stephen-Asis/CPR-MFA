@@ -23,6 +23,10 @@ console.log(req.body);
   });
 });
 
+app.get("/", (req, res) => {
+  res.send(`<h1>Welcome to the API</h1>`);
+})
+
 app.listen(8000, () => {
   console.log("Server running on http://localhost:8000");
 });
