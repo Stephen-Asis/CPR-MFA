@@ -9,7 +9,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.post("/supplier", (req, res) => {
   const success = req?.body;
-console.log(req.body);
+  console.log("------------------------------------------------------");
+  console.log("------------------------------------------------------");
+  console.log(req.body);
   if (success) {
     return res.status(200).json({
       success: true,
